@@ -1,0 +1,220 @@
+// ChessGame.java
+
+abstract class Piece {
+    private String color;
+
+    public Piece(String color) {
+        this.color = color;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public abstract boolean isValidMove(int startRow, int startCol, int endRow, int endCol);
+
+    public abstract String getSymbol();
+}
+
+// King Class
+class King extends Piece {
+
+    public King(String color) {
+        super(color);
+    }
+
+    @Override
+    public boolean isValidMove(int sr, int sc, int er, int ec) {
+        return Math.abs(sr - er) <= 1 && Math.abs(sc - ec) <= 1;
+    }
+
+    @Override
+    public String getSymbol() {
+        return "K";
+    }
+}
+
+// Queen Class
+class Queen extends Piece {
+
+    public Queen(String color) {
+        super(color);
+    }
+
+    @Override
+    public boolean isValidMove(int sr, int sc, int er, int ec) {
+        return sr == er || sc == ec || Math.abs(sr - er) == Math.abs(sc - ec);
+    }
+
+    @Override
+    public String getSymbol() {
+        return "Q";
+    }
+}
+
+// Rook Class
+class Rook extends Piece {
+
+    public Rook(String color) {
+        super(color);
+    }
+
+    @Override
+    public boolean isValidMove(int sr, int sc, int er, int ec) {
+        return sr == er || sc == ec;
+    }
+
+    @Override
+    public String getSymbol() {
+        return "R";
+    }
+}
+
+// Bishop Class
+class Bishop extends Piece {
+
+    public Bishop(String color) {
+        super(color);
+    }
+
+    @Override
+    public boolean isValidMove(int sr, int sc, int er, int ec) {
+        return Math.abs(sr - er) == Math.abs(sc - ec);
+    }
+
+    @Override
+    public String getSymbol() {
+        return "B";
+    }
+}
+
+// Knight Class
+class Knight extends Piece {
+
+    public Knight(String color) {
+        super(color);
+    }
+
+    @Override
+    public boolean isValidMove(int sr, int sc, int er, int ec) {
+        int row = Math.abs(sr - er);
+        int col = Math.abs(sc - ec);
+
+        return (row == 2 && col == 1) || (row == 1 && col == 2);
+    }
+
+    @Override
+    public String getSymbol() {
+        return "N";
+    }
+}
+
+// Pawn Class
+class Pawn extends Piece {
+
+    public Pawn(String color) {
+        super(color);
+    }
+
+    @Override
+    public boolean isValidMove(int sr, int sc, int er, int ec) {
+        if (getColor().equalsIgnoreCase("White")) {
+            return sc == ec && er == sr - 1;
+        } else {
+            return sc == ec && er == sr + 1;
+        }
+    }
+
+    @Override
+    public String getSymbol() {
+        return "P";
+    }
+}
+
+// Chess Board
+class Board {
+
+    private Piece[][] board;
+
+    public Board() {
+        board = new Piece[8][8];
+        initializeBoard();
+    }
+
+    private void initializeBoard() {
+        board[0][0] = new Rook("Black");
+        board[0][1] = new Knight("Black");
+        board[0][2] = new Bishop("Black");
+        board[0][3] = new Queen("Black");
+        board[0][4] = new King("Black");
+
+        board[7][0] = new Rook("White");
+        board[7][1] = new Knight("White");
+        board[7][2] = new Bishop("White");
+        board[7][3] = new Queen("White");
+        board[7][4] = new King("White");
+
+        for (int i = 0; i < 8; i++) {
+            board[1][i] = new Pawn("Black");
+            board[6][i] = new Pawn("White");
+        }
+    }
+
+    public void displayBoard() {
+        System.out.println("Chess Board:");
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+
+                if (board[i][j] == null)
+                    System.out.print("- ");
+                else
+                    System.out.print(board[i][j].getSymbol() + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public void movePiece(int sr, int sc, int er, int ec) {
+
+        Piece piece = board[sr][sc];
+
+        if (piece == null) {
+            System.out.println("No piece at selected position.");
+            return;
+        }
+
+        if (piece.isValidMove(sr, sc, er, ec)) {
+            board[er][ec] = piece;
+            board[sr][sc] = null;
+            System.out.println(piece.getSymbol() + " moved successfully.");
+        } else {
+            System.out.println("Invalid Move!");
+        }
+    }
+}
+
+// Main Class
+public class ChessGame {
+
+    public static void main(String[] args) {
+
+        Board board = new Board();
+
+        board.displayBoard();
+
+        System.out.println("\nMoving White Pawn...");
+        board.movePiece(6, 0, 5, 0);
+
+        System.out.println();
+
+        board.displayBoard();
+
+        System.out.println("\nMoving White Rook...");
+        board.movePiece(7, 0, 5, 0);
+
+        System.out.println();
+
+        board.displayBoard();
+    }
+}
