@@ -1,0 +1,60 @@
+// Generic Data Container using Generic Class, Generic Method,
+// and Bounded Type Parameters
+
+// Generic Class
+class DataContainer<T> {
+    private T data;
+
+    public DataContainer(T data) {
+        this.data = data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void displayData() {
+        System.out.println("Stored Data: " + data);
+    }
+}
+
+public class GenericDataContainer {
+
+    // Generic Method
+    public static <T> void printValue(T value) {
+        System.out.println("Generic Method Value: " + value);
+    }
+
+    // Bounded Type Parameter
+    public static <T extends Number> double square(T number) {
+        return number.doubleValue() * number.doubleValue();
+    }
+
+    public static void main(String[] args) {
+
+        // Integer Container
+        DataContainer<Integer> intContainer = new DataContainer<>(100);
+        intContainer.displayData();
+
+        // String Container
+        DataContainer<String> stringContainer = new DataContainer<>("Hello Java");
+        stringContainer.displayData();
+
+        // Double Container
+        DataContainer<Double> doubleContainer = new DataContainer<>(25.5);
+        doubleContainer.displayData();
+
+        // Generic Method
+        printValue("Welcome");
+        printValue(500);
+        printValue(12.75);
+
+        // Bounded Type Parameter Method
+        System.out.println("Square of 10 = " + square(10));
+        System.out.println("Square of 5.5 = " + square(5.5));
+    }
+}
